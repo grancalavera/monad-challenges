@@ -19,7 +19,7 @@ rands s n = r : rands s' (n - 1)
 -- Random character generation
 
 randLetter :: Gen Char
-randLetter s = generalA toLetter rand s
+randLetter = generalA toLetter rand
 
 randString _ 0 = []
 randString s n = r : randString s' (n - 1)
@@ -35,13 +35,13 @@ randString3 = randString (mkSeed 1) 3
 type Gen a = (Seed -> (a, Seed))
 
 randEven :: Gen Integer
-randEven s = generalA (*2) rand s
+randEven = generalA (*2) rand
 
 randOdd :: Gen Integer
-randOdd s = generalA (+1) randEven s
+randOdd = generalA (+1) randEven
 
 randTen :: Gen Integer
-randTen s = generalA (*10) rand s
+randTen = generalA (*10) rand
 
 -- generalA :: (a -> b) -> (Seed -> (a, Seed)) -> Seed -> (b, Seed))
 generalA :: (a -> b) -> Gen a -> Gen b
@@ -53,10 +53,10 @@ generalA f g s = (f r, s')
 -- Generalizing Random Pairs
 
 randPair :: Gen (Char, Integer)
-randPair s = generalPair randLetter rand s
+randPair = generalPair randLetter rand
 
 randPair2 :: Gen (Char, Integer)
-randPair2 s = generalPair randLetter rand s
+randPair2 = generalPair randLetter rand
 
 generalPair :: Gen a -> Gen b -> Gen (a, b)
 generalPair g1 g2 s = ((x, y), s'')
@@ -65,7 +65,7 @@ generalPair g1 g2 s = ((x, y), s'')
     (y, s'') = g2 s'
 
 generalPair2 :: Gen a -> Gen b -> Gen (a, b)
-generalPair2 g1 g2 s = generalB f g1 g2 s
+generalPair2 g1 g2 = generalB f g1 g2
   where f x y = (x, y)
 
 generalB :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
