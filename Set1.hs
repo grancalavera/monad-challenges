@@ -97,5 +97,8 @@ genTwo g f s = f r s'
   where
     (r, s') = g s
 
+-- ??
+-- genTwo rand (\r -> randLetter) (mkSeed 1)
+
 mkGen :: a -> Gen a
 mkGen x s = (x, s)
