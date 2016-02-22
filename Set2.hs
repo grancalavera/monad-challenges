@@ -64,6 +64,21 @@ queryGreek d q = case lookupMay q d of
 --------------------------------------------------------------------------------
 -- Generalizing chains of failures
 
+chain :: (a -> Maybe b) -> Maybe a -> Maybe b
+chain _ Nothing = Nothing
+chain f (Just x) = f x
+
+link :: Maybe a -> (a -> Maybe b) -> Maybe b
+link = flip chain
+
+queryGreek2 :: GreekData -> String -> Maybe Double
+queryGreek2 d q =
+  lookupMay q d `link`(\xs ->
+    tailMay xs `link` (\xs' ->
+      maximumMay xs' `link` (\mx ->
+        headMay xs `link` (\h ->
+          divMay (fromIntegral mx) (fromIntegral h)`link` Just))))
+
 --------------------------------------------------------------------------------
 -- Chaining variations
 
