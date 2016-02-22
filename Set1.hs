@@ -76,7 +76,7 @@ generalB f g1 g2 s = (f x y, s'')
 
 --------------------------------------------------------------------------------
 -- Generalizing Lists of Generators
--- (see "Applicative programming with effects")
+-- (see "Applicative programming with effects" http://www.staff.city.ac.uk/~ross/papers/Applicative.pdf)
 -- Gen a = (Seed -> (a, Seed))
 -- Gen [a] = (Seed -> ([a], Seed))
 
