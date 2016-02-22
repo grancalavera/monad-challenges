@@ -48,6 +48,19 @@ minimumMay (x:xs) = case minimumMay xs of Nothing -> Just x
 --------------------------------------------------------------------------------
 -- Chains of failing computations
 
+queryGreek :: GreekData -> String -> Maybe Double
+queryGreek d q = case lookupMay q d of
+  Nothing -> Nothing
+  Just xs -> case tailMay xs of
+    Nothing -> Nothing
+    Just xs' -> case maximumMay xs' of
+      Nothing -> Nothing
+      Just mx -> case headMay xs of
+        Nothing -> Nothing
+        Just h -> case divMay (fromIntegral mx) (fromIntegral h) of
+          Nothing -> Nothing
+          Just q' -> Just (q')
+
 --------------------------------------------------------------------------------
 -- Generalizing chains of failures
 
