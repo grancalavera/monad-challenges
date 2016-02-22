@@ -90,13 +90,16 @@ addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
 addSalaries ss e1 e2 =
   lookupMay e1 ss `link`
     (\s1 -> lookupMay e2 ss `link`
-      (\s2 -> Just (s1 + s2)))
+      (\s2 -> mkMaybe (s1 + s2)))
 
 yLink :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
-yLink f ma mb = ma `link` (\x -> mb `link` (\y -> Just (f x y)))
+yLink f ma mb = ma `link` (\x -> mb `link` (\y -> mkMaybe (f x y)))
 
 addSalaries' :: [(String, Integer)] -> String -> String -> Maybe Integer
 addSalaries' ss e1 e2 = yLink (+) (lookupMay e1 ss) (lookupMay e2 ss)
+
+mkMaybe :: a -> Maybe a
+mkMaybe x = Just x
 
 --------------------------------------------------------------------------------
 -- Tailprod
