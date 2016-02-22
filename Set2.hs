@@ -73,14 +73,30 @@ link = flip chain
 
 queryGreek2 :: GreekData -> String -> Maybe Double
 queryGreek2 d q =
-  lookupMay q d `link`(\xs ->
-    tailMay xs `link` (\xs' ->
-      maximumMay xs' `link` (\mx ->
-        headMay xs `link` (\h ->
-          divMay (fromIntegral mx) (fromIntegral h)`link` Just))))
+  lookupMay q d `link`
+    (\xs ->
+      tailMay xs `link`
+        (\xs' ->
+          maximumMay xs' `link`
+            (\mx ->
+              headMay xs `link`
+                (\h -> divMay (fromIntegral mx) (fromIntegral h) `link`
+                  Just))))
 
 --------------------------------------------------------------------------------
 -- Chaining variations
+
+addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries ss e1 e2 =
+  lookupMay e1 ss `link`
+    (\s1 -> lookupMay e2 ss `link`
+      (\s2 -> Just (s1 + s2)))
+
+yLink :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
+yLink f ma mb = ma `link` (\x -> mb `link` (\y -> Just (f x y)))
+
+addSalaries' :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries' ss e1 e2 = yLink (+) (lookupMay e1 ss) (lookupMay e2 ss)
 
 --------------------------------------------------------------------------------
 -- Tailprod
