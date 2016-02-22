@@ -103,3 +103,33 @@ mkMaybe x = Just x
 
 --------------------------------------------------------------------------------
 -- Tailprod
+
+tailProd :: Num a => [a] -> Maybe a
+tailProd xs = tailMay xs `link` (\t -> mkMaybe (product t))
+
+tailSum :: Num a => [a] -> Maybe a
+tailSum xs = tailMay xs `link` (\t -> mkMaybe (sum t))
+
+transMaybe :: (a -> b) -> Maybe a -> Maybe b
+transMaybe f ma = ma `link` (\x -> mkMaybe (f x))
+
+tailProd' :: Num a => [a] -> Maybe a
+tailProd' xs = transMaybe product (tailMay xs)
+
+tailSum' :: Num a => [a] -> Maybe a
+tailSum' xs = transMaybe sum (tailMay xs)
+
+tailMax :: Ord a => [a] -> Maybe (Maybe a)
+tailMax xs = tailMay xs `link` (\t -> mkMaybe $ maximumMay t)
+
+tailMin :: Ord a => [a] -> Maybe (Maybe a)
+tailMin xs = tailMay xs `link` (\t -> mkMaybe $ minimumMay t)
+
+combine :: Maybe (Maybe a) -> Maybe a
+combine mma = mma `link` id
+
+tailMax' :: Ord a => [a] -> Maybe a
+tailMax' xs = combine (tailMax xs)
+
+tailMin' :: Ord a => [a] -> Maybe a
+tailMin' xs = combine (tailMin xs)
