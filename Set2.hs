@@ -76,8 +76,7 @@ queryGreek2 d q =
   lookupMay q d `link`
     (\xs ->
       tailMay xs `link`
-        (\xs' ->
-          maximumMay xs' `link`
+        (\xs' ->          maximumMay xs' `link`
             (\mx ->
               headMay xs `link`
                 (\h -> divMay (fromIntegral mx) (fromIntegral h) `link`
