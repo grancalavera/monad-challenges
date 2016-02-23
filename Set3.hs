@@ -18,6 +18,14 @@ pairWith x (y:ys) = (x, y) : pairWith x ys
 --------------------------------------------------------------------------------
 --Poker hands
 
+data Card = Card Int String
+
+instance Show Card where
+  show (Card r s) = show r ++ s
+
+allCards :: [Int] -> [String] -> [Card]
+allCards rs ss = map (\(r, s) -> Card r s) $ allPairs rs ss
+
 --------------------------------------------------------------------------------
 --Generalizing pairs and cards
 
