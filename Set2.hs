@@ -57,9 +57,7 @@ queryGreek d q = case lookupMay q d of
       Nothing -> Nothing
       Just mx -> case headMay xs of
         Nothing -> Nothing
-        Just h -> case divMay (fromIntegral mx) (fromIntegral h) of
-          Nothing -> Nothing
-          Just q' -> Just (q')
+        Just h -> divMay (fromIntegral mx) (fromIntegral h)
 
 --------------------------------------------------------------------------------
 -- Generalizing chains of failures
