@@ -121,7 +121,7 @@ generalB2 f g1 g2 = genTwo g1 (\r1 ->
 repRandom' :: [Gen a] -> Gen [a]
 repRandom' [] = mkGen []
 repRandom' (g:gs) = genTwo g (\r ->
-  genTwo (repRandom' gs) (\rs -> (
-      mkGen (r:rs))))
+                      genTwo (repRandom' gs) (\rs -> (
+                          mkGen (r:rs))))
 
 fiveRands'' = repRandom' (replicate 5 rand) (mkSeed 1)
