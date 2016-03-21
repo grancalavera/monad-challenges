@@ -3,7 +3,13 @@
 
 module Set4 where
 import MCPrelude
-import Set2
+import Set2 (
+    Maybe(Just, Nothing)
+  , headMay
+  , tailMay
+  , lookupMay
+  , divMay
+  )
 
 --------------------------------------------------------------------------------
 -- Generalizing State and Maybe
@@ -104,6 +110,9 @@ ap mf ma =
 --------------------------------------------------------------------------------
 -- Using the abstraction
 
+--------------------------------------------------------------------------------
+-- Random Generators
+
 -- runGen randGen $ mkSeed 1
 -- (16807,Seed {unSeed = 16807})
 randGen :: Gen Integer
@@ -136,3 +145,44 @@ generalPair2 f ga gb = liftM2 f ga gb
 
 repRandom :: [Gen a] -> Gen [a]
 repRandom gs = sequence3 gs
+
+fiveRands :: [Integer]
+fiveRands = evalGen (repRandom $ replicate 5 randGen) (mkSeed 1)
+
+--------------------------------------------------------------------------------
+-- The Maybe type
+
+maximumMay :: Ord a => [a] -> Maybe a
+maximumMay [] = Nothing
+maximumMay (x:xs) = Just (foldl max x xs)
+
+minimumMay :: Ord a => [a] -> Maybe a
+minimumMay [] = Nothing
+minimumMay (x:xs) = Just (foldl min x xs)
+
+queryGreek :: GreekData -> String -> Maybe Double
+queryGreek d q =
+    lookupMay q d   `bind` \xs  ->
+    tailMay xs      `bind` \xs' ->
+    maximumMay xs'  `bind` \mx  ->
+    headMay xs      `bind` \h   ->
+    divMay (fromIntegral mx) (fromIntegral h)
+
+addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries ss e1 e2 = liftM2 (+) (lookupMay e1 ss) (lookupMay e2 ss)
+
+tailFMay :: ([a] -> b) -> [a] -> Maybe b
+tailFMay f xs = liftM f (tailMay xs)
+
+tailProd :: Num a => [a] -> Maybe a
+tailProd = tailFMay product
+
+tailSum :: Num a => [a] -> Maybe a
+tailSum = tailFMay sum
+
+tailMax :: Ord a => [a] -> Maybe a
+tailMax = join . tailFMay maximumMay
+
+tailMin :: Ord a => [a] -> Maybe a
+tailMin = join . tailFMay minimumMay
+
