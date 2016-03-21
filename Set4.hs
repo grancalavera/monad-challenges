@@ -171,18 +171,18 @@ queryGreek d q =
 addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
 addSalaries ss e1 e2 = liftM2 (+) (lookupMay e1 ss) (lookupMay e2 ss)
 
-tailFMay :: ([a] -> b) -> [a] -> Maybe b
-tailFMay f xs = liftM f (tailMay xs)
+ifTailThen :: ([a] -> b) -> [a] -> Maybe b
+ifTailThen f xs = liftM f (tailMay xs)
 
 tailProd :: Num a => [a] -> Maybe a
-tailProd = tailFMay product
+tailProd = ifTailThen product
 
 tailSum :: Num a => [a] -> Maybe a
-tailSum = tailFMay sum
+tailSum = ifTailThen sum
 
 tailMax :: Ord a => [a] -> Maybe a
-tailMax = join . tailFMay maximumMay
+tailMax = join . ifTailThen maximumMay
 
 tailMin :: Ord a => [a] -> Maybe a
-tailMin = join . tailFMay minimumMay
+tailMin = join . ifTailThen minimumMay
 
