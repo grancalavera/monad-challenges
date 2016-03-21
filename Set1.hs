@@ -89,7 +89,7 @@ repRandom (g:gs) s = (r:rs, s'')
     (r, s') = g s
     (rs, s'') = repRandom gs s'
 
-fiveRands' = repRandom (replicate 5 rand) (mkSeed 1)
+fiveRands2 = fst $ repRandom (replicate 5 rand) (mkSeed 1)
 
 --------------------------------------------------------------------------------
 -- Threading the random number state
@@ -118,10 +118,16 @@ generalB2 f g1 g2 = genTwo g1 (\r1 ->
                       genTwo g2 (\r2 ->
                         mkGen (f r1 r2)))
 
-repRandom' :: [Gen a] -> Gen [a]
-repRandom' [] = mkGen []
-repRandom' (g:gs) = genTwo g (\r ->
-                      genTwo (repRandom' gs) (\rs ->
+repRandom2 :: [Gen a] -> Gen [a]
+repRandom2 [] = mkGen []
+repRandom2 (g:gs) = genTwo g (\r ->
+                      genTwo (repRandom2 gs) (\rs ->
                           mkGen (r:rs)))
 
-fiveRands'' = repRandom' (replicate 5 rand) (mkSeed 1)
+fiveRands3 = fst $ repRandom2 (replicate 5 rand) (mkSeed 1)
+
+repRandom3 :: [Gen a] -> Gen [a]
+repRandom3 [] = mkGen []
+repRandom3 (g:gs) = generalB2 (:) g (repRandom3 gs)
+
+fiveRands4 = fst $ repRandom3 (replicate 5 rand) (mkSeed 1)
