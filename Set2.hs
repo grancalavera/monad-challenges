@@ -35,15 +35,11 @@ divMay x y = Just (x / y)
 
 maximumMay :: Ord a => [a] -> Maybe a
 maximumMay [] = Nothing
-maximumMay (x:xs) = mx (maximumMay xs)
-  where
-    mx Nothing = Just x
-    mx (Just y) = if x > y then Just x else Just y
+maximumMay (x:xs) = Just (foldl max x xs)
 
 minimumMay :: Ord a => [a] -> Maybe a
 minimumMay [] = Nothing
-minimumMay (x:xs) = case minimumMay xs of Nothing -> Just x
-                                          (Just y) -> if x < y then Just x else Just y
+minimumMay (x:xs) = Just (foldl min x xs)
 
 --------------------------------------------------------------------------------
 -- Chains of failing computations

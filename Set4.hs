@@ -9,6 +9,8 @@ import Set2 (
   , tailMay
   , lookupMay
   , divMay
+  , minimumMay
+  , maximumMay
   )
 
 --------------------------------------------------------------------------------
@@ -152,14 +154,6 @@ fiveRands = evalGen (repRandom $ replicate 5 randGen) (mkSeed 1)
 --------------------------------------------------------------------------------
 -- The Maybe type
 
-maximumMay :: Ord a => [a] -> Maybe a
-maximumMay [] = Nothing
-maximumMay (x:xs) = Just (foldl max x xs)
-
-minimumMay :: Ord a => [a] -> Maybe a
-minimumMay [] = Nothing
-minimumMay (x:xs) = Just (foldl min x xs)
-
 queryGreek :: GreekData -> String -> Maybe Double
 queryGreek d q =
     lookupMay q d   `bind` \xs  ->
@@ -185,4 +179,3 @@ tailMax = join . ifTailThen maximumMay
 
 tailMin :: Ord a => [a] -> Maybe a
 tailMin = join . ifTailThen minimumMay
-
